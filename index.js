@@ -10,7 +10,10 @@
                 { label: 'Builder', href: 'builder.html' },
                 { label: 'Components', href: 'components.html' }
             ].forEach(function (item) {
-                if (nav.querySelector('a[href="' + item.href + '"]')) return;
+                var alreadyPresent = Array.prototype.some.call(nav.querySelectorAll('a'), function (link) {
+                    return link.getAttribute('href') === item.href || link.textContent.trim().toLowerCase() === item.label.toLowerCase();
+                });
+                if (alreadyPresent) return;
                 var link = document.createElement('a');
                 link.href = item.href;
                 link.textContent = item.label;
@@ -90,9 +93,81 @@
         });
     }
 
+    function initComponentsPage() {
+        if (!window.location.pathname.endsWith('/components.html')) return;
+
+        var componentTypes = {
+            'Header - Nav': 'header',
+            'Hero - Hero': 'hero',
+            'Text - Rich Text': 'text',
+            'Image+Text - Media Split': 'split',
+            'Features - 3-col benefits': 'features',
+            'Testimonial - Quote': 'testimonial',
+            'Pricing - 3-tier pricing': 'pricing',
+            'Contact - Form + info': 'contact',
+            'CTA - Centered CTA': 'cta',
+            'Footer - Footer links': 'footer'
+        };
+
+        function wirePageLinks() {
+            document.querySelectorAll('a').forEach(function (link) {
+                var label = link.textContent.trim().toLowerCase();
+                if (label === 'builder' || label === 'open builder' || label === 'get started' || label === 'start building free') {
+                    link.href = 'builder.html';
+                } else if (label === 'components') {
+                    link.href = 'components.html';
+                }
+            });
+        }
+
+        function getComponentType(button) {
+            var card = button.closest('.group');
+            var heading = card && card.querySelector('h3');
+            var title = heading ? heading.textContent.trim() : '';
+
+            if (!title) {
+                var dialog = button.closest('div[class*="fixed"]');
+                var dialogText = dialog ? dialog.textContent : '';
+                title = Object.keys(componentTypes).find(function (componentTitle) {
+                    return dialogText.includes(componentTitle);
+                }) || '';
+            }
+
+            return componentTypes[title] || '';
+        }
+
+        document.addEventListener('click', function (event) {
+            var button = event.target.closest('button');
+            if (!button || !button.textContent.includes('Add to Builder')) return;
+
+            var type = getComponentType(button);
+            if (!type) return;
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            try {
+                var pending = JSON.parse(localStorage.getItem('pending_blocks') || '[]');
+                if (!Array.isArray(pending)) pending = [];
+                pending.push(type);
+                localStorage.setItem('pending_blocks', JSON.stringify(pending));
+                window.location.href = 'builder.html?added=' + encodeURIComponent(type);
+            } catch (error) {
+                window.alert('Could not save this component. Enable browser storage and try again.');
+            }
+        }, true);
+
+        wirePageLinks();
+        var root = document.getElementById('root');
+        if (root && window.MutationObserver) {
+            new MutationObserver(wirePageLinks).observe(root, { childList: true, subtree: true });
+        }
+    }
+
     function initPage() {
         initNav();
         initContactForm();
+        initComponentsPage();
     }
 
     if (document.readyState === 'loading') {
@@ -100,4 +175,14 @@
     } else {
         initPage();
     }
+    // Smooth scrolling for preview anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const id = a.getAttribute('href');
+    if (id && id !== '#') {
+      document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
 })();
