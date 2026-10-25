@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Library - ClientSite Builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="components.js" defer></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 flex flex-col h-screen overflow-hidden">
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-emerald-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none">
+    Component added successfully!
+  </div>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="flex items-center justify-between px-8 py-4 bg-slate-800 border-b border-slate-700 shrink-0">
+    <div class="flex items-center space-x-4">
+      <a href="index.html" class="text-slate-400 hover:text-white text-sm flex items-center gap-1 transition">
+        ← Home
+      </a>
+      <h1 class="font-bold text-lg text-white">🧩 Component Library</h1>
+      <nav class="flex items-center gap-4 text-sm" aria-label="Main navigation">
+        <a href="builder.html" class="text-slate-300 hover:text-white">Builder</a>
+        <a href="components.html" class="text-white" aria-current="page">Components</a>
+      </nav>
+    </div>
+    <div class="text-xs text-slate-400 font-mono bg-slate-900 px-3 py-1 rounded-md border border-slate-700">10 Available Blocks</div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <div class="flex-1 overflow-y-auto p-8">
+    <div class="max-w-7xl mx-auto w-full">
+      
+      <!-- HEADER & SEARCH -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold">Browse & Add Components</h2>
+          <p class="text-slate-400 text-sm mt-1">Select polished sections to inject directly into your client's active workspace canvas.</p>
+        </div>
+        
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search components..." 
+          class="bg-slate-800 border border-slate-700 px-4 py-2 rounded-lg text-sm w-full md:w-72 focus:outline-none focus:border-blue-500"
+        />
+      </div>
+
+      <!-- CATEGORY FILTER PILLS -->
+      <div class="flex flex-wrap gap-2 mb-8" id="categoryFilters">
+        <button data-category="All" aria-pressed="true" class="cat-btn px-4 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white transition">All</button>
+        <button data-category="Navigation" aria-pressed="false" class="cat-btn px-4 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 hover:text-white border border-slate-700 transition">Navigation</button>
+        <button data-category="Content" aria-pressed="false" class="cat-btn px-4 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 hover:text-white border border-slate-700 transition">Content</button>
+        <button data-category="Conversion" aria-pressed="false" class="cat-btn px-4 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 hover:text-white border border-slate-700 transition">Conversion</button>
+        <button data-category="Social Proof" aria-pressed="false" class="cat-btn px-4 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-400 hover:text-white border border-slate-700 transition">Social Proof</button>
+      </div>
+
+      <!-- GRID OF COMPONENTS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12" id="componentsGrid">
+        
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
